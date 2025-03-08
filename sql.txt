@@ -1,0 +1,56 @@
+INSERT INTO user (name, email, password, role, created_at) 
+VALUES 
+('John1 Doe1', 'john1.doe1@example.com', 'password123', 'admin', CURRENT_TIMESTAMP),
+('John2 Doe2', 'john2.doe2@example.com', 'password123', 'user', CURRENT_TIMESTAMP),
+('John3 Doe3', 'john3.doe3@example.com', 'password123', 'user', CURRENT_TIMESTAMP),
+('John4 Doe4', 'john4.doe4@example.com', 'password123', 'admin', CURRENT_TIMESTAMP),
+('John5 Doe5', 'john5.doe5@example.com', 'password123', 'user', CURRENT_TIMESTAMP);
+
+
+INSERT INTO fournisseur (nom, email, entreprise, telephone, adresse, date_inscription) 
+VALUES 
+('Frss1', 'frss1.contact@gmail.com', 'Frss1Company', '0610101010', '111 Avenue meknes rue fes, Tanger', CURRENT_TIMESTAMP),
+('Frss2', 'frss2.contact@gmail.com', 'Frss2Company', '0620202020', '222 Avenue meknes rue fes, Tanger', CURRENT_TIMESTAMP),
+('Frss3', 'frss3.contact@gmail.com', 'Frss3Company', '0630303030', '333 Avenue meknes rue fes, Tanger', CURRENT_TIMESTAMP),
+('Frss4', 'frss4.contact@gmail.com', 'Frss4Company', '0640404040', '444 Avenue meknes rue fes, Tanger', CURRENT_TIMESTAMP),
+('Frss5', 'frss5.contact@gmail.com', 'Frss5Company', '0650505050', '555 Avenue meknes rue fes, Tanger', CURRENT_TIMESTAMP);
+
+
+
+INSERT INTO appel_offre (titre, description, date_lancement, date_limite, budget_estime, statut, cree_par) 
+VALUES 
+('Fourniture de matériel informatique', 'Fourniture de matériel informatique pour l\'année 2025.', CURRENT_TIMESTAMP, '2025-06-30', 50000.00, 'ouvert', 1),
+('Réaménagement de bureaux', 'Réaménagement de bureaux pour l\'entreprise GreenEnergy.', CURRENT_TIMESTAMP, '2025-05-15', 25000.00, 'ouvert', 2),
+('Construction d\'un entrepôt', 'Construction d\'un entrepôt pour la société AutoParts.', CURRENT_TIMESTAMP, '2025-07-30', 100000.00, 'ouvert', 3),
+('Fourniture et installation de panneaux solaires', 'Fourniture et installation de panneaux solaires pour un projet de GreenEnergy.', CURRENT_TIMESTAMP, '2025-08-10', 75000.00, 'ouvert', 4),
+('Aménagement d\'une cuisine industrielle', 'Aménagement d\'une cuisine industrielle pour le FoodMarket.', CURRENT_TIMESTAMP, '2025-04-30', 35000.00, 'ouvert', 5);
+
+
+
+INSERT INTO offre (appel_offre_id, fournisseur_id, montant_offre, proposition, statut, date_soumission) 
+VALUES 
+(1, 1, 48000.00, 'Fourniture de 100 ordinateurs et accessoires.', 'en_attente', CURRENT_TIMESTAMP),
+(2, 2, 22000.00, 'Réaménagement des bureaux avec mobilier ergonomique.', 'en_attente', CURRENT_TIMESTAMP),
+(3, 3, 95000.00, 'Construction d\'un entrepôt avec salle de stockage et bureau.', 'en_attente', CURRENT_TIMESTAMP),
+(4, 4, 70000.00, 'Fourniture et installation de 50 panneaux solaires.', 'en_attente', CURRENT_TIMESTAMP),
+(5, 5, 33000.00, 'Aménagement de cuisine industrielle pour le service de restauration.', 'en_attente', CURRENT_TIMESTAMP);
+
+
+
+INSERT INTO contrat_approuve (appel_offre_id, fournisseur_id, valeur_contrat, date_attribution) 
+VALUES 
+(1, 1, 48000.00, CURRENT_TIMESTAMP),
+(2, 2, 22000.00, CURRENT_TIMESTAMP),
+(3, 3, 95000.00, CURRENT_TIMESTAMP),
+(4, 4, 70000.00, CURRENT_TIMESTAMP),
+(5, 5, 33000.00, CURRENT_TIMESTAMP);
+
+
+
+INSERT INTO document (appel_offre_id, offre_id, nom_fichier, type_fichier, lien_fichier, date_telechargement) 
+VALUES 
+(1, 1, 'Offre_Frss1.pdf', 'pdf', 'http://example.com/Frss1.pdf', CURRENT_TIMESTAMP),
+(2, 2, 'Offre_Frss2.pdf', 'pdf', 'http://example.com/Frss2.pdf', CURRENT_TIMESTAMP),
+(3, 3, 'Offre_Frss3.pdf', 'pdf', 'http://example.com/Frss3.pdf', CURRENT_TIMESTAMP),
+(4, 4, 'Offre_Frss4.pdf', 'pdf', 'http://example.com/Frss4.pdf', CURRENT_TIMESTAMP),
+(5, 5, 'Offre_Frss5.pdf', 'pdf', 'http://example.com/Frss5.pdf', CURRENT_TIMESTAMP);
