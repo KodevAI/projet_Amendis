@@ -17,6 +17,7 @@ VALUES
 
 
 
+
 INSERT INTO appel_offre (titre, description, date_lancement, date_limite, budget_estime, statut, cree_par) 
 VALUES 
 ('Fourniture de matériel informatique', 'Fourniture de matériel informatique pour l\'année 2025.', CURRENT_TIMESTAMP, '2025-06-30', 50000.00, 'ouvert', 1),
