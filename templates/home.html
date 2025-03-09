@@ -1,8 +1,135 @@
-<html>
-    <head>
+<!DOCTYPE html>
+<html lang="fr">
 
-    </head>
-    <body>
-        hello
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Accueil</title>
+
+    <!-- Lien vers Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lien vers tailwind config personnalisé -->
+    <script src="{{ url_for('static', filename='js/tailwind-config.js') }}"></script>
+
+    <!-- Lien vers CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo2.png') }}">
+</head>
+<body>
+    <div class="relative w-full h-screen">
+        <!-- Vidéo de fond -->
+        <video class="bg-video" autoplay loop muted>
+        <source src="/static/images/amendis_video.mp4" type="video/mp4">
+        Votre navigateur ne supporte pas la vidéo.
+        </video>
+
+        <!-- Navigation -->
+        <nav class="border-gray-200 bg-transparent dark:border-gray-700 transition duration-300 ease-in-out hover:bg-gray-800 fixed w-full top-0 left-0 z-50">
+            <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 group relative">
+                <!-- Logo -->
+                <a href="{{ url_for('home') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
+                    <img src="/static/images/logo2.png" class="h-8" />
+                </a>
+                <!-- Hamburger Menu -->
+                <button type="button" onclick="toggleMenu(event)" class="inline-flex items-center justify-center p-2 w-10 h-10 text-sm text-popping_red rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+                    <span class="sr-only">Open main menu</span>
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+                    </svg>
+                </button>
+                <!-- Menu -->
+                <div class="hidden absolute top-full left-0 w-full bg-gray-50 dark:bg-gray-800 dark:border-gray-700 z-10" id="navbar-hamburger">
+                    <ul class="flex flex-col font-medium mt-4 rounded-lg">
+                        <li>
+                            <a href="{{ url_for('home') }}" class="block py-2 px-3 text-white bg-popping_red rounded-sm dark:bg-popping_red" aria-current="page">Accueil</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('avisdoffre') }}" class="block py-2 px-3 text-gray-900 bg-white rounded-sm hover:bg-gray-100 hover:text-popping_red dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-popping_red">Avis d'appels d'offres</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('marchesattribues') }}" class="block py-2 px-3 text-gray-900 bg-white rounded-sm hover:bg-gray-100 hover:text-popping_red dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-popping_red">Marchés attribués</a>
+                        </li>
+                        <li class="relative">
+                            <a href="#" class="block py-2 px-3 text-gray-900 bg-white rounded-sm hover:bg-gray-100 hover:text-popping_red dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-popping_red">Relations Fournisseurs</a>
+                            <div class="absolute hidden bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-400 rounded-lg w-48 shadow-lg left-0 mt-2 z-20" id="dropdown-content">
+                                <a href="{{ url_for('reglmarch') }}" class="block py-2 px-3 text-gray-900 bg-white rounded-sm hover:bg-gray-100 hover:text-popping_red dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-popping_red">Règlements des marchés</a>
+                                <a href="{{ url_for('demaprogsoc') }}" class="block py-2 px-3 text-gray-900 bg-white rounded-sm hover:bg-gray-100 hover:text-popping_red dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-popping_red">Démarche Progrès social</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('proginvest') }}" class="block py-2 px-3 text-gray-900 bg-white rounded-sm hover:bg-gray-100 hover:text-popping_red dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-popping_red">Programmes d’investissement</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('contacternous') }}" class="block py-2 px-3 text-gray-900 bg-white rounded-sm hover:bg-gray-100 hover:text-popping_red dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-popping_red">Contacter nous</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Contenu de la page -->
+        <div class="absolute inset-0 flex flex-col  items-center text-center text-white">
+            <br><br><br><br>
+            <h1 class="text-4xl sm:text-6xl font-bold text-popping_red bg-zinc-50 bg-opacity-40 rounded-lg p-4">Bienvenue sur le site web Achats Amendis</h1>
+        </div>
+        <div class="absolute bottom-1 left-0 right-0 flex items-center justify-center mb-medium-m4">
+            <a href="{{ url_for('avisdoffre') }}" class="inline-block px-6 py-2 hover:text-white bg-popping_red rounded-full hover:bg-dark_red text-xl text-white">
+                Consultez tous les appels d‘offres en cours
+            </a>
+        </div>
+    </div>
+
+    <hr class="border-t-4 border-dashed border-popping_red ">
+
+    <div class="px-4 py-8 max-w-6xl mx-auto">
+        <p class="text-lg text-gray-800 first-letter:text-7xl first-letter:font-bold first-letter:text-gray-900 first-letter:me-3 first-letter:float-start">
+            Par ambition de travailler avec nos fournisseurs et nos partenaires en 
+            offrant la meilleure qualité de service dans le strict respect des règles, 
+            Amendis met à votre disposition ce site web dédié à 100% aux partenaires, et 
+            nous nous engageons dans une démarche d’amélioration continue afin d’optimiser
+            et de centraliser nos échanges dans un souci de fiabilité, de rapidité et de 
+            transparence. Fournisseurs, entrepreneurs, bureaux d’étude… vous pouvez consulter
+            en temps réel les avis des appels d’offres lancés par Amendis Tanger et Tétouan,
+            et de vous renseigner sur les résultats définitifs y afférents, prononcées par 
+            la commission des appels d’offres. Ainsi, nous vous invitons à consulter de 
+            manière systématique la liste des appels d'offres et d'identifier ceux qui 
+            susciteront votre intérêt.
+        </p>
+    </div>
+
+    <script>
+        // Function to toggle the visibility of the menu
+        function toggleMenu(event) {
+            event.stopPropagation(); 
+            const menu = document.getElementById('navbar-hamburger');
+            menu.classList.toggle('hidden'); 
+        }
+
+        // Close the menu
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('navbar-hamburger');
+            const menuButton = document.querySelector('button');
+
+        if (!menu.contains(event.target) && event.target !== menuButton) {
+            menu.classList.add('hidden');
+            }
+        });
+    </script>
+    <script>
+        function toggleDropdown() {
+            const dropdownContent = document.getElementById("dropdown-content");
+            dropdownContent.classList.toggle("hidden");
+        }
+
+        const dropdownButton = document.querySelector("li.relative > a");
+        dropdownButton.addEventListener("click", function(event) {
+            event.preventDefault();
+            toggleDropdown();
+        });
+    </script>
+</body>
+
 </html>

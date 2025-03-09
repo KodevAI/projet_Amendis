@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Démarche Progrès social
+{% endblock %}
+
+{% block content %}
+    <h1 class="text-center text-3xl sm:text-5xl font-bold text-popping_red p-4">
+        Démarche Progrès social
+    </h1>
+
+    <div class="p-20 pb-0 pt-10">
+        <p class="mb-3">
+            Amendis adopte une démarche de progrès social auprès de ses fournisseurs afin 
+            de s’assurer que les normes de sécurité, d'hygiène, de santé et de protection 
+            sociale sont bien respectées.
+        </p>
+
+        <p class="mb-3">
+            Initiée en 2006, cette démarche permet de sensibiliser nos partenaires aux exigences
+            telles que la couverture sociale minimale, le respect de l'âge minimum du travail, 
+            la durée légale du travail, le suivi médical, la formation sur les risques et la 
+            sécurité sur les chantiers comme l'utilisation d'équipements de protection individuelle
+            (EPI).
+        </p>
+
+        <p class="mb-3">
+            A cet effet, Amendis a élaboré une charte responsables, les soumissionnaires sont tenus
+            d'en prendre connaissance, l'approuver, et veiller à son respect.
+        </p>
+
+        <a href="{{ url_for('static', filename='pdfs/Charte Achats Responsables Amendis VF Valide.pdf') }}" class="inline-flex items-center font-medium text-dark_red dark:text-dark_red hover:underline">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 mr-2">
+                <path fill-rule="evenodd" d="M12 2.25a.75.75 0 0 1 .75.75v11.69l3.22-3.22a.75.75 0 1 1 1.06 1.06l-4.5 4.5a.75.75 0 0 1-1.06 0l-4.5-4.5a.75.75 0 1 1 1.06-1.06l3.22 3.22V3a.75.75 0 0 1 .75-.75Zm-9 13.5a.75.75 0 0 1 .75.75v2.25a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5V16.5a.75.75 0 0 1 1.5 0v2.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V16.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+              </svg>              
+            Télécharger la Charte Achats Responsables Version française
+        </a>
+
+        <br>
+        
+        <a href="{{ url_for('static', filename='pdfs/Charte Achats Responsables VA ValideAR.pdf') }}" class="inline-flex items-center font-medium text-dark_red dark:text-dark_red hover:underline">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 mr-2">
+                <path fill-rule="evenodd" d="M12 2.25a.75.75 0 0 1 .75.75v11.69l3.22-3.22a.75.75 0 1 1 1.06 1.06l-4.5 4.5a.75.75 0 0 1-1.06 0l-4.5-4.5a.75.75 0 1 1 1.06-1.06l3.22 3.22V3a.75.75 0 0 1 .75-.75Zm-9 13.5a.75.75 0 0 1 .75.75v2.25a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5V16.5a.75.75 0 0 1 1.5 0v2.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V16.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+              </svg>              
+            Télécharger la Charte Achats Responsables Version arabe
+        </a>
+        
+        <p class="mb-3 mt-3">
+            Amendis organise annuellement au profit de ses fournisseurs et de ses sous-traitants 
+            des actions de sensibilisation et de formations sur la prévention des accidents de 
+            travail, notamment pendant la semaine Internationale de la Santé et la Sécurité, 
+            organisée par le groupe Veolia.
+        </p>
+    </div>
+    
+{% endblock %}

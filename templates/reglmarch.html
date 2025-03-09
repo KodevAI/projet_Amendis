@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Règlements des marchés
+{% endblock %}
+
+{% block content %}
+    <h1 class="text-center text-3xl sm:text-5xl font-bold text-popping_red p-4">Règlements des marchés </h1>
+
+    <!-- <hr class="text-red"> -->
+     <div class="p-20 pb-0 pt-10">
+
+        <p class="mb-3">
+            Amendis est une société en charge de la gestion déléguée de l’eau, de l’électricité et de l’assainissement 
+            liquide à la région de Tanger et Tétouan dont les appels d’offre sont assujettis aux modalités prévues au décret
+             N°2.12.3.349 (20 mars 2013) fixant les conditions et les formes de passation des marchés de l’état, ainsi que 
+             certaines dispositions relatives à leurs control et à leur gestion conformément à l’annexe 11 du contrat de gestion 
+             déléguée.
+        </p>
+
+        <p class="mb-3">
+            En effet, la passation des marchés respecte les conditions fixées par l’état et obéit aux principes de:
+
+            <ul class="pl-3 pb-3 space-y-1 text-left text-gray-500 dark:text-gray-400">
+                <li class="flex items-center space-x-3 rtl:space-x-reverse">
+                    <svg class="shrink-0 w-3.5 h-3.5 text-dark_red dark:text-dark_red" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+                    </svg>
+                    <span>La liberté d'accès à la commande publique ;</span>
+                </li>
+                <li class="flex items-center space-x-3 rtl:space-x-reverse">
+                    <svg class="shrink-0 w-3.5 h-3.5 text-dark_red dark:text-dark_red" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+                    </svg>
+                    <span>L’égalité de traitement des concurrents ;</span>
+                </li>
+                <li class="flex items-center space-x-3 rtl:space-x-reverse">
+                    <svg class="shrink-0 w-3.5 h-3.5 text-dark_red dark:text-dark_red" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+                    </svg>
+                    <span>Garantie des droits des concurrents ;</span>
+                </li>
+                <li class="flex items-center space-x-3 rtl:space-x-reverse">
+                    <svg class="shrink-0 w-3.5 h-3.5 text-dark_red dark:text-dark_red" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+                    </svg>
+                    <span>Transparence　;</span>
+                </li>
+                <li class="flex items-center space-x-3 rtl:space-x-reverse">
+                    <svg class="shrink-0 w-3.5 h-3.5 text-dark_red dark:text-dark_red" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+                    </svg>
+                    <span>Respect de l’environnement et les objectifs de développement durable.</span>
+                </li>
+            </ul>
+        </p>
+
+        <p class="mb-3">
+            Amendis veille à l’évaluation des dossiers présentés par les soumissionnaires, qui sont tenus de démontrer qu'ils 
+            ont la qualification, les capacités et les ressources nécessaires pour mener à bien l'exécution des missions qui leurs 
+            sont confiées pour se voir attribuer un marché.
+        </p>
+
+        <p class="mb-3">
+            Les dossiers présentés doivent se conformer aux prescriptions du Règlement Particulier des Appels d’Offres (cf.RPAQ). 
+            Les entreprises sont informées des résultats des évaluations effectuées.
+        </p>
+     </div>
+    
+    <div class="pl-20 flex items-center space-x-2">
+        <img src="{{ url_for('static', filename='icons/pdf.png') }}" alt="PDF" class="w-6 h-6">
+        <a href="{{ url_for('documents') }}" class="inline-flex items-center font-medium text-dark_red dark:text-dark_red hover:underline">
+            Télécharger les documents
+            <svg class="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+            </svg>
+            </a>
+    </div>
+{% endblock %}

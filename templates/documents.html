@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Documents
+{% endblock %}
+
+{% block content %}
+<h2>Liste de documents</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Date</th>
+            <th>Taille</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="ms-itmHoverEnabled ms-itmhover" oncontextmenu="return ShowCallOutOrECBWrapper(this, event, true)" iid="0,9,0" id="0,9,0" setedgeborder="true">
+            <td class="ms-cellstyle ms-vb-title" isecb="TRUE" iscallout="TRUE" height="100%">
+                <a class="ms-listlink ms-draggable" href="/achats/Documents%20partages/R%C3%A8glements%20des%20march%C3%A9s/RGAO%20v21.pdf"
+                   onmousedown="return VerifyHref(this,event,'1','','')"
+                   onclick="return DispEx(this,event,'TRUE','FALSE','FALSE','','1','','','','','','0','0','0x1000031041')"
+                   aria-label="RGAO v21, pdf undefined" dragid="1" draggable="true">
+                    RGAO v21
+                </a>
+            </td>
+            <td class="ms-cellstyle ms-vb2">
+                <span class="ms-noWrap" title="15/11/2018 18:11">15 novembre 2018</span>
+            </td>
+            <td class="ms-vb-lastCell ms-cellstyle ms-vb2 ms-vb-lastCell">568 KB</td>
+            <td class="ms-list-itemLink-td ms-cellstyle">
+                <a href="/achats/Documents%20partages/R%C3%A8glements%20des%20march%C3%A9s/RGAO%20v21.pdf" download>Télécharger</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

@@ -26,5 +26,33 @@ app = create_app()
 def home():
     return render_template('home.html')
 
+@app.route('/avisdoffre')
+def avisdoffre():
+    return render_template('avisdoffre.html')
+
+@app.route('/marchesattribues')
+def marchesattribues():
+    return render_template('marchesattribues.html')
+
+@app.route('/demaprogsoc')
+def demaprogsoc():
+    return render_template('demaprogsoc.html')
+
+@app.route('/reglmarch')
+def reglmarch():
+    return render_template('reglmarch.html')
+
+@app.route('/reglmarch/documents')
+def documents():
+    return render_template('documents.html')
+
+@app.route('/proginvest')
+def proginvest():
+    return render_template('proginvest.html')
+
+@app.route('/contacternous')
+def contacternous():
+    return render_template('contacternous.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
