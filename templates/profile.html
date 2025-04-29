@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Profile
+{% endblock %}
+
+{% block content %}
+    {% if session['user_type'] == 'user' and current_user.role == 'admin' %}
+        <div class="bg-dark_gray flex items-center justify-center space-x-4 py-10">
+            <h1 class="text-3xl sm:text-5xl font-bold text-popping_red">
+                Profile
+            </h1>
+            <span class="fas fa-user-shield text-popping_red text-2xl sm:text-4xl"></span>
+        </div>    
+        
+                <center>
+        <div class="bg-dark_gray py-40 pt-0">
+        <div class="w-full max-w-lg  bg-light_gray border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">        
+            <div class="flex flex-col items-center pb-10 pt-10">
+                <!-- Bonjour {{ current_user.name }} 👋 – Vous êtes connecté en tant qu'administrateur. -->
+                <span class="fas fa-user-shield text-bleu_ciel text-2xl sm:text-4xl"></span>
+                <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-bleu_ciel">{{ current_user.name }}</h5>
+                <span class="text-sm text-gray-500 dark:text-gray-400">Administrateur</span>
+                <div class="flex mt-4 md:mt-6">
+                    <a href="{{ url_for('inscription_frss') }}" class="text-white bg-official_gradient  focus:ring-4  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 hover:bg-pastel_gradient hover:text-dark_gray">Ajouter un fournisseur</a>
+                    <a href="{{ url_for('historique') }}" class="text-white bg-official_gradient  focus:ring-4  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 hover:bg-pastel_gradient hover:text-dark_gray">Historique</a>
+                    <a href="{{ url_for('edit_profile') }}" class="text-white bg-official_gradient  focus:ring-4  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 hover:bg-pastel_gradient hover:text-dark_gray">Modifier profile</a>
+                </div>
+            </div>
+        </div></div></center>
+
+    {% elif session['user_type'] == 'user' and current_user.role == 'user' %}
+        <div class="bg-dark_gray flex items-center justify-center space-x-4 py-10">
+            <h1 class="text-3xl sm:text-5xl font-bold text-popping_red">
+                Profile
+            </h1>
+            <span class="fas fa-user text-popping_red text-2xl sm:text-4xl"></span>
+        </div>    
+        
+                <center>
+        <div class="bg-dark_gray py-40 pt-0">
+        <div class="w-full max-w-lg  bg-light_gray border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">        
+            <div class="flex flex-col items-center pb-10 pt-10">
+                <!-- Bonjour {{ current_user.name }} 👋 – Heureux de vous revoir ! -->
+                <span class="fas fa-user text-bleu_ciel text-2xl sm:text-4xl"></span>
+                <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-bleu_ciel">{{ current_user.name }}</h5>
+                <span class="text-sm text-gray-500 dark:text-gray-400">Utilisateur</span>
+                <div class="flex mt-4 md:mt-6">
+                    <a href="{{ url_for('edit_profile') }}" class="text-white bg-official_gradient  focus:ring-4  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 hover:bg-pastel_gradient hover:text-dark_gray">Modifier profile</a>
+                </div>
+            </div>
+        </div></div></center>
+    {% elif session['user_type'] == 'fournisseur' %}
+        <div class="bg-dark_gray flex items-center justify-center space-x-4 py-10">
+            <h1 class="text-3xl sm:text-5xl font-bold text-popping_red">
+                Profile
+            </h1>
+            <span class="fas fa-building text-popping_red text-2xl sm:text-4xl"></span>
+        </div>    
+        
+                <center>
+        <div class="bg-dark_gray py-40 pt-0">
+        <div class="w-full max-w-lg  bg-light_gray border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">        
+            <div class="flex flex-col items-center pb-10 pt-10">
+                <!-- Bonjour {{ current_user.nom }} 👋 – Bienvenue, représentant de {{ current_user.entreprise }}. -->
+                <span class="fas fa-building text-bleu_ciel text-2xl sm:text-4xl"></span>
+                <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-bleu_ciel">{{ current_user.nom }}</h5>
+                <span class="text-sm text-gray-500 dark:text-gray-400">Fournisseur</span>
+                <div class="flex mt-4 md:mt-6">
+                    <a href="{{ url_for('edit_profile') }}" class="text-white bg-official_gradient  focus:ring-4  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 hover:bg-pastel_gradient hover:text-dark_gray">Modifier profile</a>
+                </div>
+            </div>
+        </div></div></center>
+ 
+        {% endif %}
+
+
+{% endblock %}

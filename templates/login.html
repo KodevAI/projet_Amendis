@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=True) %}
+  {% if messages %}
+    <div class="fixed top-20 right-4 space-y-2 z-50">
+      {% for category, message in messages %}
+        <div class="relative px-4 py-3 rounded-lg shadow-md text-white flex items-center justify-between 
+          {% if category == 'success' %} bg-green-500 
+          {% elif category == 'danger' %} bg-red-500 
+          {% elif category == 'warning' %} bg-yellow-500 
+          {% else %} bg-blue-500 {% endif %}">
+          <span>{{ message }}</span>
+          <button onclick="this.parentElement.style.display='none'" class="ml-4 text-lg font-bold">
+            &times;
+          </button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<div class="min-h-screen bg-dark_gray py-6 flex flex-col justify-center sm:py-12">
+    <div class="relative py-3 sm:max-w-xl sm:mx-auto">
+        <div class="absolute inset-0 bg-gradient-to-l from-[#333] to-[#fa0504] shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+        <div class="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+            <div class="max-w-md mx-auto">
+                <div>
+                    <h1 class="text-3xl font-semibold">Connexion</h1>
+                </div>
+                <div class="divide-y divide-gray-200">
+                    <div class="py-8 text-base leading-6 space-y-6 text-gray-700 sm:text-lg sm:leading-7">
+                        <form method="POST">
+                            {{ form.hidden_tag() }}
+                            
+                            <!-- Email Field -->
+                            <div class="relative mb-6">
+                                <input autocomplete="off" id="email" name="email" type="text"
+                                    class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-rose-600"
+                                    placeholder="Adresse e-mail" />
+                                <label for="email"
+                                    class="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">
+                                    Adresse e-mail
+                                </label>
+                            </div>
+
+                            <!-- Password Field -->
+                            <div class="relative mb-6">
+                                <input autocomplete="off" id="password" name="password" type="password"
+                                    class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-rose-600"
+                                    placeholder="Mot de Passe" />
+                                <label for="password"
+                                    class="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">
+                                    Mot de Passe
+                                </label>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="relative mt-4">
+                                <button type="submit"
+                                    class="bg-gradient-to-l from-[#333] to-[#fa0504] text-white rounded-md px-4 py-2 hover:bg-gradient-to-br focus:ring-4">
+                                    Se connecter
+                                </button>
+                            </div>
+
+                        </form>
+
+                        <!-- Forgot Password / Signup Links -->
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

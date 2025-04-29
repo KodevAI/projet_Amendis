@@ -5,34 +5,107 @@ Documents
 {% endblock %}
 
 {% block content %}
-<h2>Liste de documents</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Nom</th>
-            <th>Date</th>
-            <th>Taille</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr class="ms-itmHoverEnabled ms-itmhover" oncontextmenu="return ShowCallOutOrECBWrapper(this, event, true)" iid="0,9,0" id="0,9,0" setedgeborder="true">
-            <td class="ms-cellstyle ms-vb-title" isecb="TRUE" iscallout="TRUE" height="100%">
-                <a class="ms-listlink ms-draggable" href="/achats/Documents%20partages/R%C3%A8glements%20des%20march%C3%A9s/RGAO%20v21.pdf"
-                   onmousedown="return VerifyHref(this,event,'1','','')"
-                   onclick="return DispEx(this,event,'TRUE','FALSE','FALSE','','1','','','','','','0','0','0x1000031041')"
-                   aria-label="RGAO v21, pdf undefined" dragid="1" draggable="true">
-                    RGAO v21
-                </a>
-            </td>
-            <td class="ms-cellstyle ms-vb2">
-                <span class="ms-noWrap" title="15/11/2018 18:11">15 novembre 2018</span>
-            </td>
-            <td class="ms-vb-lastCell ms-cellstyle ms-vb2 ms-vb-lastCell">568 KB</td>
-            <td class="ms-list-itemLink-td ms-cellstyle">
-                <a href="/achats/Documents%20partages/R%C3%A8glements%20des%20march%C3%A9s/RGAO%20v21.pdf" download>Télécharger</a>
-            </td>
-        </tr>
-    </tbody>
-</table>
+
+<div class="max-w-5xl mx-auto">
+    <div class="flex items-center justify-between mb-6 pt-20">
+        <a href="{{ url_for('reglmarch') }}">
+            <svg width="64px" height="64px" viewBox="-2.4 -2.4 28.80 28.80" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="0.00024000000000000003"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.24000000000000005"></g><g id="SVGRepo_iconCarrier"> <path opacity="0.4" d="M16.19 2H7.82C4.17 2 2 4.17 2 7.81V16.18C2 19.82 4.17 21.99 7.81 21.99H16.18C19.82 21.99 21.99 19.82 21.99 16.18V7.81C22 4.17 19.83 2 16.19 2Z" fill="#333"></path> <path d="M13.9195 8.48006H8.76945L9.09945 8.15006C9.38945 7.86006 9.38945 7.38006 9.09945 7.09006C8.80945 6.80006 8.32945 6.80006 8.03945 7.09006L6.46945 8.66006C6.17945 8.95006 6.17945 9.43006 6.46945 9.72006L8.03945 11.2901C8.18945 11.4401 8.37945 11.5101 8.56945 11.5101C8.75945 11.5101 8.94945 11.4401 9.09945 11.2901C9.38945 11.0001 9.38945 10.5201 9.09945 10.2301L8.83945 9.97006H13.9195C15.1995 9.97006 16.2495 11.0101 16.2495 12.3001C16.2495 13.5901 15.2094 14.6301 13.9195 14.6301H8.99945C8.58945 14.6301 8.24945 14.9701 8.24945 15.3801C8.24945 15.7901 8.58945 16.1301 8.99945 16.1301H13.9195C16.0295 16.1301 17.7495 14.4101 17.7495 12.3001C17.7495 10.1901 16.0295 8.48006 13.9195 8.48006Z" fill="#333333"></path> </g></svg>
+    </a>
+        <h1 class="text-center text-3xl sm:text-4xl font-bold text-popping_red">📂 Liste de documents</h1>
+        <button id="downloadAll" class="text-white bg-gradient-to-l from-[#333]  to-[#fa0504] hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Télécharger tous les fichiers</button>
+    </div>
+        
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+            <thead class="text-white bg-gradient-to-l from-[#333]  to-[#fa0504]">
+
+                <tr>
+                    <th class="py-3 px-6 text-center">
+                        <input type="checkbox" id="selectAll" class="cursor-pointer">
+                    </th>
+                    <th class="py-3 px-6 text-left">Nom</th>
+                    <th class="py-3 px-6 text-left">Modifié</th>
+                    <th class="py-3 px-6 text-left">Taille (KB)</th>
+                </tr>
+            </thead>
+            <tbody id="documentsTable">
+                <tr class="hover:bg-gradient-to-l from-[#d9d9d9]  to-[#fecdcd]">
+                    <td class="py-3 px-6 text-center">
+                        <input type="checkbox" class="document-checkbox cursor-pointer" value="{{ url_for('static', filename='pdfs/RGAO v21.pdf') }}">
+                    </td>
+                    <td class="py-3 px-6">
+                        <a href="{{ url_for('static', filename='pdfs/RGAO v21.pdf') }}" download>RGAO v21</a>
+                    </td>
+                    <td class="py-3 px-6">12/03/2025</td>
+                    <td class="py-3 px-6">568 KB</td>
+                </tr>
+                <tr class="hover:bg-gradient-to-l from-[#d9d9d9]  to-[#fecdcd]">
+                    <td class="py-3 px-6 text-center">
+                        <input type="checkbox" class="document-checkbox cursor-pointer" value="{{ url_for('static', filename='pdfs/SPMSE TANGER.pdf') }}">
+                    </td>
+                    <td class="py-3 px-6">
+                        <a href="{{ url_for('static', filename='pdfs/SPMSE TANGER.pdf') }}" download>SPMSE TANGER</a>
+                    </td>
+                    <td class="py-3 px-6">12/03/2025</td>
+                    <td class="py-3 px-6">1270 KB</td>
+                </tr>
+                <tr class="hover:bg-gradient-to-l from-[#d9d9d9]  to-[#fecdcd]">
+                    <td class="py-3 px-6 text-center">
+                        <input type="checkbox" class="document-checkbox cursor-pointer" value="{{ url_for('static', filename='pdfs/SPMSE TETOUAN.pdf') }}">
+                    </td>
+                    <td class="py-3 px-6">
+                        <a href="{{ url_for('static', filename='pdfs/SPMSE TETOUAN.pdf') }}" download>SPMSE TETOUAN</a>
+                    </td>
+                    <td class="py-3 px-6">12/03/2025</td>
+                    <td class="py-3 px-6">423 KB</td>
+                </tr>
+                <tr>
+                    <td class="py-3 px-6 text-center">
+                        <center>
+                        <a id="downloadSelected">
+                            <img src="{{ url_for('static', filename='icons/download.png') }}" alt="PDF" class="w-6 h-6">                        </a>
+                    </center>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+    document.getElementById("selectAll").addEventListener("change", function() {
+        document.querySelectorAll(".document-checkbox").forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+    });
+
+    function downloadFiles(urls) {
+        urls.forEach(url => {
+            let link = document.createElement("a");
+            link.href = url;
+            link.download = url.split("/").pop();
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    }
+
+    document.getElementById("downloadSelected").addEventListener("click", function() {
+        let selectedFiles = Array.from(document.querySelectorAll(".document-checkbox:checked"))
+            .map(checkbox => checkbox.value);
+        if (selectedFiles.length > 0) {
+            downloadFiles(selectedFiles);
+        } else {
+            alert("Veuillez sélectionner au moins un fichier.");
+        }
+    });
+
+    document.getElementById("downloadAll").addEventListener("click", function() {
+        let allFiles = Array.from(document.querySelectorAll(".document-checkbox"))
+            .map(checkbox => checkbox.value);
+        downloadFiles(allFiles);
+    });
+</script>
+
 {% endblock %}

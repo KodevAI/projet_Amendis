@@ -5,5 +5,75 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Contacter Nous !</h1>
+    <h1 class="text-center text-3xl sm:text-4xl font-bold text-red m-6">Contacter Nous !</h1>
+    <div class="max-w-2xl mx-auto mt-10 p-6 bg-light_gray rounded-lg shadow mb-2">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="p-4 mb-4 text-white bg-green-500 rounded">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <label class="block text-sm font-medium text-gray-700 p-2 text-dark_red">{{ form.type_demande.label }}</label>
+            {{ form.type_demande(class="w-full p-2 border rounded-lg mb-3", id="type_demande", onchange="toggleFields()") }}
+
+            <div id="extra_fields">
+                <label class="block text-sm font-medium text-gray-700 p-2 text-dark_red">{{ form.societe.label }}</label>
+                {{ form.societe(class="w-full p-2 border rounded-lg mb-3") }}
+
+                <label class="block text-sm font-medium text-gray-700 p-2 text-dark_red">{{ form.secteur.label }}</label>
+                {{ form.secteur(class="w-full p-2 border rounded-lg mb-3") }}
+
+                <label class="block text-sm font-medium text-gray-700 p-2 text-dark_red">{{ form.nom_prenom.label }}</label>
+                {{ form.nom_prenom(class="w-full p-2 border rounded-lg mb-3") }}
+
+                <label class="block text-sm font-medium text-gray-700 p-2 text-dark_red">{{ form.telephone.label }}</label>
+                {{ form.telephone(class="w-full p-2 border rounded-lg mb-3") }}
+            </div>
+
+            <label class="block text-sm font-medium text-gray-700 p-2 text-dark_red">{{ form.email.label }}</label>
+            {{ form.email(class="w-full p-2 border rounded-lg mb-3") }}
+
+            <label class="block text-sm font-medium text-gray-700 p-2 text-dark_red">{{ form.observations.label }}</label>
+            {{ form.observations(class="w-full p-2 border rounded-lg mb-3") }}
+            
+            <center><button type="submit" class="text-white bg-gradient-to-l from-[#333]  to-[#fa0504] hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Envoyer</button>
+        
+            </form>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                let typeDemande = document.getElementById("type_demande");
+                let societeField = document.getElementById("societe").parentElement;
+                let secteurField = document.getElementById("secteur").parentElement;
+                let nomField = document.getElementById("nom_prenom").parentElement;
+                let telField = document.getElementById("telephone").parentElement;
+            
+                function toggleFields() {
+                    if (typeDemande.value === "rec_anon") {
+                        societeField.style.display = "none";
+                        secteurField.style.display = "none";
+                        nomField.style.display = "none";
+                        telField.style.display = "none";
+                    } else {
+                        societeField.style.display = "block";
+                        secteurField.style.display = "block";
+                        nomField.style.display = "block";
+                        telField.style.display = "block";
+                    }
+                }
+            
+                typeDemande.addEventListener("change", toggleFields);
+                toggleFields(); 
+            });
+            </script>
+            
+    <script>
+        document.addEventListener("DOMContentLoaded", toggleFields);
+    </script>
 {% endblock %}

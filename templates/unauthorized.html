@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Accès refusé
+{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center min-h-[70vh] text-center p-4">
+    <img src="{{ url_for('static', filename='icons/403error.png') }}" alt="Access Denied Illustration" class="w-80 sm:w-96 mb-6">
+    
+    <h1 class="text-3xl sm:text-5xl font-bold text-red-600 mb-4">
+        Accès refusé 🔒
+    </h1>
+
+    <p class="text-gray-700 text-lg sm:text-xl mb-6">
+        Vous n'avez pas l'autorisation d'accéder à cette page.<br>
+        Veuillez contacter l'administrateur si vous pensez que c'est une erreur.
+    </p>
+
+    <a href="{{ url_for('home') }}" class="inline-block bg-red-600 text-white px-6 py-3 rounded-2xl hover:bg-red-700 transition">
+        Retour à l'accueil
+    </a>
+</div>
+{% endblock %}

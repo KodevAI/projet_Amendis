@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Marchés attribués
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+<form method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+        <label class="block text-sm font-medium text-gray-700 p-2 text-dark_red" for="documents">Documents à joindre</label>
+        <input type="file" class="w-full p-2 border rounded-lg mb-3" name="documents" multiple>
+    </div>
+    <button type="submit" class="text-white bg-gradient-to-l from-[#333]  to-[#fa0504] hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Attribuer le marché</button>
+</form>
+</div>
+{% endblock %}

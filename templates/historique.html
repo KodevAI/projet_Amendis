@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-center text-3xl sm:text-5xl font-bold text-popping_red p-4">Historique des actions</h2>
+<div class="container mx-auto p-6 overflow-x-auto">
+    <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden border-b border-gray">
+        <thead class="text-white bg-gradient-to-l from-[#333]  to-[#fa0504] border-b">
+            <tr>
+                <th class=" px-4 py-2 text-center">Utilisateur</th>
+                <th class=" px-4 py-2 text-center">Action</th>
+                <th class=" px-4 py-2 text-center">Date</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+          {% for entry in history %}
+            <tr class="hover:bg-gradient-to-l from-[#d9d9d9]  to-[#fecdcd] border-b">
+                <td class="border-y px-4 py-2 text-sm text-center ">{{ entry.user.name if entry.user and entry.user_type == 'user' else entry.user.nom if entry.user else 'Inconnu' }}</td>
+                <td class="border-y px-4 py-2 text-sm text-center">{{ entry.action }}</td>
+                <td class="border-y px-4 py-2 text-sm text-center">{{ entry.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+             </tr>
+             {% else %}
+                <tr class="border-b">
+                    <td colspan="9" class="border px-4 py-2 text-center text-gray-500">Aucune donnée disponible</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

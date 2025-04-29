@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Modification{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between mb-4 p-4 pb-0">
+    <a href="{{ url_for('profile') }}" >
+            <svg width="64px" height="64px" viewBox="-2.4 -2.4 28.80 28.80" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="0.00024000000000000003"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.24000000000000005"></g><g id="SVGRepo_iconCarrier"> <path opacity="0.4" d="M16.19 2H7.82C4.17 2 2 4.17 2 7.81V16.18C2 19.82 4.17 21.99 7.81 21.99H16.18C19.82 21.99 21.99 19.82 21.99 16.18V7.81C22 4.17 19.83 2 16.19 2Z" fill="#B23A3B"></path> <path d="M13.9195 8.48006H8.76945L9.09945 8.15006C9.38945 7.86006 9.38945 7.38006 9.09945 7.09006C8.80945 6.80006 8.32945 6.80006 8.03945 7.09006L6.46945 8.66006C6.17945 8.95006 6.17945 9.43006 6.46945 9.72006L8.03945 11.2901C8.18945 11.4401 8.37945 11.5101 8.56945 11.5101C8.75945 11.5101 8.94945 11.4401 9.09945 11.2901C9.38945 11.0001 9.38945 10.5201 9.09945 10.2301L8.83945 9.97006H13.9195C15.1995 9.97006 16.2495 11.0101 16.2495 12.3001C16.2495 13.5901 15.2094 14.6301 13.9195 14.6301H8.99945C8.58945 14.6301 8.24945 14.9701 8.24945 15.3801C8.24945 15.7901 8.58945 16.1301 8.99945 16.1301H13.9195C16.0295 16.1301 17.7495 14.4101 17.7495 12.3001C17.7495 10.1901 16.0295 8.48006 13.9195 8.48006Z" fill="#B23A3B"></path> </g></svg>
+    </a>
+    <h1 class="text-center text-3xl sm:text-4xl font-bold text-red m-6">Modifier votre profil</h1>
+    <h1></h1>
+</div>
+<div class="max-w-2xl mx-auto mt-10 p-6 bg-light_gray rounded-lg shadow mb-2">
+    
+    <form method="POST">
+    {{ form.hidden_tag() }}
+
+    {% if is_fournisseur %}
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="nom">Nom et prénom</label>
+            {{ form.nom(class="w-full p-2 border border-gray-300 rounded-lg") }}
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="email">Email<span class="text-red">*</span></label>
+            {{ form.email(class="w-full p-2 border border-gray-300 rounded-lg") }}
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="changePassword" name="change_password">
+            <label class="form-check-label" for="changePassword">Modifier le mot de passe</label>
+        </div>
+    
+        <div id="passwordField" style="display: none;">
+            <div class="mb-4">
+                {{ form.password.label }}
+                {{ form.password(class="w-full p-2 border border-gray-300 rounded-lg") }}
+            </div>
+            <div class="mb-4">
+                {{ form.confirm_password.label }}
+                {{ form.confirm_password(class="w-full p-2 border border-gray-300 rounded-lg") }}
+            </div>
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="entreprise">Nom de l'entreprise<span class="text-red">*</span></label>
+            {{ form.entreprise(class="w-full p-2 border border-gray-300 rounded-lg") }}
+            <p id="entreprise-message" class="text-red text-xs italic">
+                 Si vous n'avez pas d'entreprise, utilisez votre nom et prénom.
+            </p>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="telephone">N° de Téléphone</label>
+            {{ form.telephone(class="w-full p-2 border border-gray-300 rounded-lg") }}
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="adresse">Adresse</label>
+            {{ form.adresse(class="w-full p-2 border border-gray-300 rounded-lg") }}
+        </div>
+
+    {% else %}
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="name">Nom et prénom</label>
+            {{ form.name(class="w-full p-2 border border-gray-300 rounded-lg") }}
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="email">Email</label>
+            {{ form.email(class="w-full p-2 border border-gray-300 rounded-lg") }}
+        </div>
+        <div class="mb-4">
+                {{ form.password.label }}
+                {{ form.password(class="w-full p-2 border border-gray-300 rounded-lg") }}
+            </div>
+        <div class="mb-4">
+                {{ form.confirm_password.label }}
+                {{ form.confirm_password(class="w-full p-2 border border-gray-300 rounded-lg") }}
+            </div>
+    {% endif %}
+
+    <div class="text-center">
+        <button type="submit" class="bg-gradient-to-l from-[#333] to-[#fa0504] text-white rounded-md px-4 py-2 hover:bg-gradient-to-br focus:ring-4">
+            Modifier
+        </button>
+    </div>
+</form>
+<script>
+    // JavaScript pour afficher/cacher le champ mot de passe en fonction de la case à cocher
+    document.getElementById('changePassword').addEventListener('change', function() {
+        var passwordField = document.getElementById('passwordField');
+        if (this.checked) {
+            passwordField.style.display = 'block';
+        } else {
+            passwordField.style.display = 'none';
+        }
+    });
+</script>
+{% endblock %}

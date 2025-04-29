@@ -15,18 +15,39 @@
 
     <!-- Lien vers CSS -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo2.png') }}">
 </head>
 
-<body>
-
+<body class="flex flex-col min-h-screen">
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+      <div class="fixed top-20 right-4 space-y-2 z-50">
+        {% for category, message in messages %}
+          <div class="relative px-4 py-3 rounded-lg shadow-md text-white flex items-center justify-between 
+            {% if category == 'success' %} bg-green-500 
+            {% elif category == 'danger' %} bg-red 
+            {% elif category == 'warning' %} bg-yellow-500 
+            {% else %} bg-blue-500 {% endif %}">
+            <span>{{ message }}</span>
+            <button onclick="this.parentElement.style.display='none'" class="ml-4 text-lg font-bold">
+              &times;
+            </button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
     {% include 'nav.html' %}
 
-    <main class="pt-16">
+    <main class="pt-16 flex-grow">
         {% block content %}{% endblock %}
     </main>
 
 </body>
+<footer>
+  {% include 'footer.html' %}
+</footer>
 
 </html>
