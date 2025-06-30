@@ -25,7 +25,7 @@ Programmes d'investissements
             </p>
         </div>
 
-        {% if session['user_type'] == 'user' and current_user.role == 'admin'  and appel_offre.statut != 'Attribué' %}
+        {% if session['user_type'] == 'user' and current_user.role == 'admin'   %}
         <form action="{{ url_for('upload_programme') }}" method="post" enctype="multipart/form-data" class="mb-6 p-4 bg-white rounded-lg shadow-md">
             <div class="flex flex-col sm:flex-row gap-4 items-end">
                 <div class="flex-1">
@@ -45,7 +45,7 @@ Programmes d'investissements
                         <th class="py-3 px-6 text-left">Ville</th>
                         <th class="py-3 px-6 text-left">Modifié</th>
                         <th class="py-3 px-6 text-left">Taille (KB)</th>
-                        {% if session['user_type'] == 'user' and current_user.role == 'admin'  and appel_offre.statut != 'Attribué' %}
+                        {% if session['user_type'] == 'user' and current_user.role == 'admin'  %}
                         <th class="py-3 px-6 text-center">Actions</th>
                         {% endif %}
                     </tr>
@@ -68,7 +68,7 @@ Programmes d'investissements
                         </td>
                         <td class="py-3 px-6">{{ programme.modified }}</td>
                         <td class="py-3 px-6">{{ programme.size }} KB</td>
-                        {% if session['user_type'] == 'user' and current_user.role == 'admin'  and appel_offre.statut != 'Attribué' %}
+                        {% if session['user_type'] == 'user' and current_user.role == 'admin'   %}
                         <td class="py-3 px-6 text-center">
                             <div class="flex justify-center items-center gap-2">
                                 <form action="{{ url_for('delete_programme', filename=programme.name) }}" method="post" style="display:inline;">

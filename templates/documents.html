@@ -14,7 +14,7 @@ Documents
         <h1 class="text-center text-3xl sm:text-4xl font-bold text-popping_red">📂 Liste de documents</h1>
         <button id="downloadAll" class="text-white bg-gradient-to-l from-[#333]  to-[#fa0504] hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Télécharger tous les fichiers</button>
     </div>
-    {% if session['user_type'] == 'user' and current_user.role == 'admin'  and appel_offre.statut != 'Attribué' %}
+    {% if session['user_type'] == 'user' and current_user.role == 'admin' %}
         <form action="{{ url_for('upload_document') }}" method="post" enctype="multipart/form-data" class="mb-6 p-4 bg-white rounded-lg shadow-md">
     <div class="flex flex-col sm:flex-row gap-4 items-end">
         <div class="flex-1">
@@ -36,7 +36,7 @@ Documents
                     <th class="py-3 px-6 text-left">Nom</th>
                     <th class="py-3 px-6 text-left">Modifié</th>
                     <th class="py-3 px-6 text-left">Taille (KB)</th>
-                    {% if session['user_type'] == 'user' and current_user.role == 'admin'  and appel_offre.statut != 'Attribué' %}
+                    {% if session['user_type'] == 'user' and current_user.role == 'admin'  %}
                     <th class="py-3 px-6 text-center">Actions</th>
                     {% endif %}
                 </tr>
@@ -52,7 +52,7 @@ Documents
     </td>
     <td class="py-3 px-6">{{ doc.modified }}</td>
     <td class="py-3 px-6">{{ doc.size }} KB</td>
-    {% if session['user_type'] == 'user' and current_user.role == 'admin'  and appel_offre.statut != 'Attribué' %}
+    {% if session['user_type'] == 'user' and current_user.role == 'admin'  %}
     <td class="py-3 px-6 text-center">
         <div class="flex justify-center items-center gap-2">
             <form action="{{ url_for('delete_document', filename=doc.name) }}" method="post" style="display:inline;">
