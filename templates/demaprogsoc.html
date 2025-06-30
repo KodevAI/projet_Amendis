@@ -23,8 +23,6 @@ Démarche Progrès social
             A cet effet, Amendis a élaboré une charte responsables, les soumissionnaires sont tenus
             d'en prendre connaissance, l'approuver, et veiller à son respect.
         </p>
-
-        <!-- Section de gestion des documents -->
         <div class="mb-6">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl font-bold text-dark_red">Documents disponibles</h2>
@@ -39,7 +37,6 @@ Démarche Progrès social
                 {% endif %}
             </div>
 
-            <!-- Liste des documents -->
             <div class="space-y-4">
                 {% for document in documents %}
                 <div class="flex items-center justify-between bg-gray-50 p-4 rounded-lg border">
@@ -98,7 +95,6 @@ Démarche Progrès social
         </p>
     </div>
 
-    <!-- Modal d'ajout de document -->
     <div id="uploadModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen">
             <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
@@ -135,7 +131,6 @@ Démarche Progrès social
         </div>
     </div>
 
-    <!-- Modal de modification de document -->
     <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen">
             <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
@@ -166,7 +161,6 @@ Démarche Progrès social
         </div>
     </div>
 
-    <!-- Messages flash -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div class="fixed top-4 right-4 z-50">
