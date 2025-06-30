@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 from forms import ContactForm, EditUserForm, FrssForm,EditFrssForm
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from forms import LoginForm
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.config.from_object('config.Config')
@@ -23,9 +24,23 @@ from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 import os
 # Ajouter une variable pour stocker le répertoire de téléchargement
-UPLOAD_FOLDER = 'uploads/documents'
+UPLOAD_FOLDER = 'static/uploads/documents'
 ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'jpg', 'png', 'jpeg'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+UPLOAD_FOLDER_DOC = 'static/uploads/upload_documents'
+ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'jpg', 'png', 'jpeg'}
+app.config['UPLOAD_FOLDER_DOC'] = UPLOAD_FOLDER_DOC
+
+UPLOAD_FOLDER_PROGRAMMES = 'static/uploads/upload_progs'
+app.config['UPLOAD_FOLDER_PROGRAMMES'] = UPLOAD_FOLDER_PROGRAMMES
+
+UPLOAD_FOLDER_SOC = 'static/uploads/upload_social'
+ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'jpg', 'png', 'jpeg'}
+app.config['UPLOAD_FOLDER_SOC'] = UPLOAD_FOLDER_SOC
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 # Fonction pour vérifier les types de fichiers autorisés
 def allowed_file(filename):
@@ -56,6 +71,56 @@ def home():
 def avisdoffre():
     appels_offres = AppelOffre.query.all()
     return render_template('avisdoffre.html', appels_offres=appels_offres)
+
+@app.route('/ajouter_appel_offre', methods=['GET', 'POST'])
+@login_required
+def ajouter_appel_offre():
+    # Vérifier que l'utilisateur est admin
+    if current_user.role != 'admin':
+        flash('Accès non autorisé', 'error')
+        return redirect(url_for('avisdoffre'))
+    
+    if request.method == 'POST':
+        titre = request.form['titre']
+        description = request.form['description']
+        date_limite = datetime.strptime(request.form['date_limite'], '%Y-%m-%d').date()
+        budget_estime = float(request.form['budget_estime'])
+        
+        # Vérifier que la date limite n'est pas dans le passé
+        if date_limite <= datetime.now().date():
+            flash('La date limite doit être dans le futur', 'error')
+            return render_template('ajouter_appel_offre.html', 
+                                 titre=titre, 
+                                 description=description, 
+                                 budget_estime=budget_estime)
+        
+        # Créer un nouvel appel d'offre
+        nouvel_appel = AppelOffre(
+            titre=titre,
+            description=description,
+            date_lancement=datetime.now().date(),
+            date_limite=date_limite,
+            budget_estime=budget_estime,
+            statut='ouvert',
+            cree_par=current_user.id
+        )
+        
+        try:
+            db.session.add(nouvel_appel)
+            db.session.commit()
+            
+            flash('Appel d\'offre créé avec succès', 'success')
+            # Utiliser le user_type de la session ou déterminer automatiquement
+            user_type = session.get('user_type', 'user')  # 'user' par défaut pour les admins
+            log_history(f"L'administrateur {current_user.name} a créé un nouvel appel d'offre: {titre}", user_type)
+            return redirect(url_for('avisdoffre'))
+        
+        except Exception as e:
+            db.session.rollback()
+            flash('Erreur lors de la création de l\'appel d\'offre', 'error')
+            return render_template('ajouter_appel_offre.html')
+    
+    return render_template('ajouter_appel_offre.html')
 
 @app.route('/avisdoffre/<int:id>')
 def detail_ao(id):
@@ -195,22 +260,313 @@ def marchesattribues_details(id):
     return render_template('marchesattribues_details.html', contrat=contrat, documents=documents)
 
 
+# @app.route('/demaprogsoc')
+# def demaprogsoc():
+#     return render_template('demaprogsoc.html')
+
 @app.route('/demaprogsoc')
 def demaprogsoc():
-    return render_template('demaprogsoc.html')
+    """Affiche la page de démarche progrès social avec gestion des documents"""
+    folder = os.path.join(app.root_path, app.config['UPLOAD_FOLDER_SOC'])
+    documents = []
+    
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+    
+    for filename in os.listdir(folder):
+        if allowed_file(filename):
+            filepath = os.path.join(folder, filename)
+            stat = os.stat(filepath)
+            name_upper = filename.upper()  # Utiliser uppercase pour comparer les suffixes
+
+            # Détection stricte de la langue
+            if ' VF ' in name_upper or name_upper.endswith('VF') or name_upper.endswith('VF.PDF'):
+                language = 'fr'
+            elif ' VA ' in name_upper or name_upper.endswith('VA') or name_upper.endswith('VA.PDF'):
+                language = 'ar'
+            elif ' fr ' in name_upper or name_upper.endswith('fr') or name_upper.endswith('FR.PDF'):
+                language = 'fr'
+            elif ' AR' in name_upper or name_upper.endswith('AR') or name_upper.endswith('AR.PDF'):
+                language = 'ar'
+            else:
+                language = 'autre'
+
+            # Nom lisible
+            display_name = filename
+            if 'CHARTE' in name_upper:
+                if language == 'ar':
+                    display_name = "Charte Achats Responsables - Version Arabe"
+                elif language == 'fr':
+                    display_name = "Charte Achats Responsables - Version Française"
+                else:
+                    display_name = "Charte Achats Responsables - Autre Version"
+
+            documents.append({
+                'name': filename,
+                'display_name': display_name,
+                'language': language,
+                'size': round(stat.st_size / 1024),
+                'modified': datetime.fromtimestamp(stat.st_mtime).strftime('%d/%m/%Y')
+            })
+    
+    return render_template('demaprogsoc.html', documents=documents)
+
+
+@app.route('/upload_document_soc', methods=['POST'])
+def upload_document_soc():
+    """Upload un nouveau document"""
+    if 'file' not in request.files:
+        flash('Aucun fichier sélectionné', 'error')
+        return redirect(url_for('demaprogsoc'))
+    
+    file = request.files['file']
+    display_name = request.form.get('display_name', '')
+    language = request.form.get('language', 'fr')
+    
+    if file.filename == '':
+        flash('Aucun fichier sélectionné', 'error')
+        return redirect(url_for('demaprogsoc'))
+    
+    if file and allowed_file(file.filename):
+        # Créer un nom de fichier basé sur le nom d'affichage et la langue
+        original_ext = os.path.splitext(file.filename)[1]
+        if display_name:
+            # Nettoyer le nom d'affichage pour en faire un nom de fichier valide
+            clean_name = "".join(c for c in display_name if c.isalnum() or c in (' ', '-', '_')).rstrip()
+            filename = f"{clean_name}_{language}{original_ext}"
+        else:
+            filename = file.filename
+        
+        filename = secure_filename(filename)
+        upload_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER_SOC'])
+        
+        # Créer le dossier s'il n'existe pas
+        if not os.path.exists(upload_path):
+            os.makedirs(upload_path)
+        
+        file.save(os.path.join(upload_path, filename))
+        flash('Document téléversé avec succès!', 'success')
+    else:
+        flash('Type de fichier non autorisé', 'error')
+    
+    return redirect(url_for('demaprogsoc'))
+
+@app.route('/delete_document_soc/<filename>', methods=['POST'])
+def delete_document_soc(filename):
+    """Supprime un document"""
+    try:
+        file_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER_SOC'], filename)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            flash('Document supprimé avec succès!', 'success')
+        else:
+            flash('Fichier non trouvé', 'error')
+    except Exception as e:
+        flash('Erreur lors de la suppression du fichier', 'error')
+    
+    return redirect(url_for('demaprogsoc'))
+
+@app.route('/rename_document_soc/<filename>', methods=['POST'])
+def rename_document_soc(filename):
+    """Renomme un document"""
+    new_display_name = request.form.get('new_display_name')
+    new_language = request.form.get('new_language', 'fr')
+    
+    if not new_display_name:
+        flash('Nouveau nom requis', 'error')
+        return redirect(url_for('demaprogsoc'))
+    
+    try:
+        # Conserver l'extension originale
+        original_ext = os.path.splitext(filename)[1]
+        
+        # Créer le nouveau nom de fichier
+        clean_name = "".join(c for c in new_display_name if c.isalnum() or c in (' ', '-', '_')).rstrip()
+        new_filename = f"{clean_name}_{new_language}{original_ext}"
+        new_filename = secure_filename(new_filename)
+        
+        old_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER_SOC'], filename)
+        new_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER_SOC'], new_filename)
+        
+        if os.path.exists(old_path):
+            os.rename(old_path, new_path)
+            flash('Document renommé avec succès!', 'success')
+        else:
+            flash('Fichier non trouvé', 'error')
+    except Exception as e:
+        flash('Erreur lors du renommage du fichier', 'error')
+    
+    return redirect(url_for('demaprogsoc'))
 
 @app.route('/reglmarch')
 def reglmarch():
     return render_template('reglmarch.html')
+from datetime import datetime
 
 @app.route('/reglmarch/documents')
+# def documents():
+#     return render_template('documents.html')
 def documents():
-    return render_template('documents.html')
+    folder = os.path.join(app.root_path, app.config['UPLOAD_FOLDER_DOC'])
+    files = []
+    for filename in os.listdir(folder):
+        if allowed_file(filename):
+            filepath = os.path.join(folder, filename)
+            stat = os.stat(filepath)
+            files.append({
+                'name': filename,
+                'size': round(stat.st_size / 1024),
+                'modified': datetime.fromtimestamp(stat.st_mtime).strftime('%d/%m/%Y')
+            })
+    return render_template('documents.html', files=files)
+@app.route('/reglmarch/documents/upload', methods=['POST'])
+def upload_document():
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        save_path = os.path.join(app.config['UPLOAD_FOLDER_DOC'], filename)
+        file.save(save_path)
+        flash('Document ajouté avec succès.')
+    else:
+        flash('Fichier non autorisé.')
+    return redirect(url_for('documents'))
+@app.route('/reglmarch/documents/delete/<filename>', methods=['POST'])
+def delete_document(filename):
+    filepath = os.path.join(app.config['UPLOAD_FOLDER_DOC'], filename)
+    if os.path.exists(filepath):
+        os.remove(filepath)
+        flash('Document supprimé.')
+    else:
+        flash('Fichier introuvable.')
+    return redirect(url_for('documents'))
 
+@app.route('/reglmarch/documents/rename/<filename>', methods=['POST'])
+def rename_document(filename):
+    new_name_input = secure_filename(request.form['new_name'])
+    old_path = os.path.join(app.config['UPLOAD_FOLDER_DOC'], filename)
+
+    # Extraire l'extension existante
+    extension = os.path.splitext(filename)[1]  # ex: ".pdf"
+
+    # S'assurer que la nouvelle extension est identique
+    if not new_name_input.lower().endswith(extension.lower()):
+        new_name = new_name_input + extension
+    else:
+        new_name = new_name_input
+
+    new_path = os.path.join(app.config['UPLOAD_FOLDER_DOC'], new_name)
+
+    if os.path.exists(old_path):
+        os.rename(old_path, new_path)
+        flash('Fichier renommé avec succès.')
+    else:
+        flash('Fichier introuvable.')
+
+    return redirect(url_for('documents'))
+
+# @app.route('/proginvest')
+# def proginvest():
+#     return render_template('proginvest.html')
 @app.route('/proginvest')
 def proginvest():
-    return render_template('proginvest.html')
+    """Affiche la page des programmes d'investissement avec gestion des fichiers"""
+    folder = os.path.join(app.root_path, app.config['UPLOAD_FOLDER_PROGRAMMES'])
+    programmes = []
+    
+    # Créer le dossier s'il n'existe pas
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+    
+    for filename in os.listdir(folder):
+        if allowed_file(filename):
+            filepath = os.path.join(folder, filename)
+            stat = os.stat(filepath)
+            
+            # Déterminer le nom d'affichage basé sur le nom du fichier
+            display_name = filename
+            if 'tanger' in filename.lower():
+                display_name = "Programme Prévisionnel Tanger"
+            elif 'tetouan' in filename.lower() or 'tétouan' in filename.lower():
+                display_name = "Programme Prévisionnel Tétouan"
+            
+            programmes.append({
+                'name': filename,
+                'display_name': display_name,
+                'size': round(stat.st_size / 1024),
+                'modified': datetime.fromtimestamp(stat.st_mtime).strftime('%d/%m/%Y')
+            })
+    
+    return render_template('proginvest.html', programmes=programmes)
 
+@app.route('/upload_programme', methods=['POST'])
+def upload_programme():
+    """Upload un nouveau programme d'investissement"""
+    if 'file' not in request.files:
+        flash('Aucun fichier sélectionné', 'error')
+        return redirect(request.url)
+    
+    file = request.files['file']
+    if file.filename == '':
+        flash('Aucun fichier sélectionné', 'error')
+        return redirect(request.url)
+    
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        upload_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER_PROGRAMMES'])
+        
+        # Créer le dossier s'il n'existe pas
+        if not os.path.exists(upload_path):
+            os.makedirs(upload_path)
+        
+        file.save(os.path.join(upload_path, filename))
+        flash('Programme d\'investissement téléversé avec succès!', 'success')
+    else:
+        flash('Type de fichier non autorisé', 'error')
+    
+    return redirect(url_for('proginvest'))
+
+@app.route('/delete_programme/<filename>', methods=['POST'])
+def delete_programme(filename):
+    """Supprime un programme d'investissement"""
+    try:
+        file_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER_PROGRAMMES'], filename)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            flash('Programme d\'investissement supprimé avec succès!', 'success')
+        else:
+            flash('Fichier non trouvé', 'error')
+    except Exception as e:
+        flash('Erreur lors de la suppression du fichier', 'error')
+    
+    return redirect(url_for('proginvest'))
+
+@app.route('/rename_programme/<filename>', methods=['POST'])
+def rename_programme(filename):
+    """Renomme un programme d'investissement"""
+    new_name = request.form.get('new_name')
+    if not new_name:
+        flash('Nouveau nom requis', 'error')
+        return redirect(url_for('proginvest'))
+    
+    try:
+        # Ajouter l'extension si elle n'est pas présente
+        if not any(new_name.lower().endswith(ext) for ext in ['.pdf', '.doc', '.docx']):
+            # Conserver l'extension originale
+            original_ext = os.path.splitext(filename)[1]
+            new_name += original_ext
+        
+        old_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER_PROGRAMMES'], filename)
+        new_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER_PROGRAMMES'], secure_filename(new_name))
+        
+        if os.path.exists(old_path):
+            os.rename(old_path, new_path)
+            flash('Programme d\'investissement renommé avec succès!', 'success')
+        else:
+            flash('Fichier non trouvé', 'error')
+    except Exception as e:
+        flash('Erreur lors du renommage du fichier', 'error')
+    
+    return redirect(url_for('proginvest'))
 from flask_mail import Mail, Message
 
 # Configuration de Flask-Mail
@@ -219,6 +575,7 @@ app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'alikhl66644@gmail.com'
 app.config['MAIL_PASSWORD'] = 'aytg hjyb lthp bych'
+app.config['MAIL_DEFAULT_SENDER'] = 'alikhl66644@gmail.com'
 
 mail = Mail(app)
 
@@ -243,7 +600,8 @@ def contacternous():
             telephone = form.telephone.data
 
         # Envoi d'un email
-        msg = Message("Demande de contact - Nouvelle soumission", sender=email, recipients=["alikhl66644@gmail.com"])
+        admin_email = "alikhl66644@gmail.com"
+        msg = Message("Demande de contact - Nouvelle soumission", sender="alikhl66644@gmail.com", recipients=[admin_email])
         msg.html = f"""
         <html>
             <body style="font-family: Arial, sans-serif; background-color: #f4f4f9; color: #333; padding: 20px;">
@@ -272,7 +630,7 @@ def contacternous():
                     <p>Merci de bien vouloir vérifier et prendre les mesures nécessaires pour répondre à cette demande dans les plus brefs délais.</p>
                     <img src="https://www.matfoot.com/wp-content/uploads/2018/10/logo2.png" alt="Logo"   />
                 </div>
-                
+
             </body>
         </html>
         """
@@ -287,12 +645,20 @@ def contacternous():
 
     return render_template('contacternous.html', form=form)
 
-@app.route('/inscription_frss')
+@app.route('/inscription_frss', methods=['GET', 'POST'])
 @login_required
 def inscription_frss():
     if session.get('user_type') != 'user' or current_user.role != 'admin':
         abort(403)
     form = FrssForm()
+    print("🔍 Method:", request.method)
+    print("✅ Form submitted:", form.is_submitted())
+    print("✅ Form valid:", form.validate_on_submit())
+    print("📝 Form errors:", form.errors)
+
+    if request.method == 'POST':
+        # Force confirm_password to match password
+        form.confirm_password.data = form.password.data
     if form.validate_on_submit():
         entreprise = form.entreprise.data if form.entreprise.data else form.nom.data
 
@@ -462,5 +828,6 @@ def edit_profile():
 
     return render_template('edit_profile.html', form=form, is_fournisseur=is_fournisseur)
 
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)

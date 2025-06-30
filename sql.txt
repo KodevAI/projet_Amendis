@@ -1,6 +1,6 @@
 INSERT INTO user (name, email, password, role, created_at) 
 VALUES 
-('John1 Doe1', 'john1.doe1@example.com', 'password123', 'admin', CURRENT_TIMESTAMP),
+('John1 Doe1', 'john1.doe1@example.com', '$2a$12$4Tm.XsBLgdhKR9u5X8MMwefuekgyBKHZqShLIW/NEWoVRB24mZmxy', 'admin', CURRENT_TIMESTAMP),
 ('John2 Doe2', 'john2.doe2@example.com', 'password123', 'user', CURRENT_TIMESTAMP),
 ('John3 Doe3', 'john3.doe3@example.com', 'password123', 'user', CURRENT_TIMESTAMP),
 ('John4 Doe4', 'john4.doe4@example.com', 'password123', 'admin', CURRENT_TIMESTAMP),

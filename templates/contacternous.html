@@ -8,13 +8,24 @@
     <h1 class="text-center text-3xl sm:text-4xl font-bold text-red m-6">Contacter Nous !</h1>
     <div class="max-w-2xl mx-auto mt-10 p-6 bg-light_gray rounded-lg shadow mb-2">
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="p-4 mb-4 text-white bg-green-500 rounded">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+          <div class="fixed top-20 right-4 space-y-2 z-50">
+            {% for category, message in messages %}
+              <div class="relative px-4 py-3 rounded-lg shadow-md text-white flex items-center justify-between 
+                {% if category == 'success' %} bg-green-500 
+                {% elif category == 'danger' %} bg-red 
+                {% elif category == 'warning' %} bg-yellow-500 
+                {% else %} bg-blue-500 {% endif %}">
+                <span>{{ message }}</span>
+                <button onclick="this.parentElement.style.display='none'" class="ml-4 text-lg font-bold">
+                  &times;
+                </button>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
         
         <form method="POST">
             {{ form.hidden_tag() }}
@@ -38,7 +49,11 @@
 
             <label class="block text-sm font-medium text-gray-700 p-2 text-dark_red">{{ form.email.label }}</label>
             {{ form.email(class="w-full p-2 border rounded-lg mb-3") }}
-
+            {% if form.email.errors %}
+                <p class="text-red text-sm mt-1">
+                {{ form.email.errors[0] }}
+                </p>
+            {% endif %}
             <label class="block text-sm font-medium text-gray-700 p-2 text-dark_red">{{ form.observations.label }}</label>
             {{ form.observations(class="w-full p-2 border rounded-lg mb-3") }}
             

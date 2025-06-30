@@ -14,7 +14,17 @@ Documents
         <h1 class="text-center text-3xl sm:text-4xl font-bold text-popping_red">📂 Liste de documents</h1>
         <button id="downloadAll" class="text-white bg-gradient-to-l from-[#333]  to-[#fa0504] hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Télécharger tous les fichiers</button>
     </div>
-        
+    {% if session['user_type'] == 'user' and current_user.role == 'admin'  and appel_offre.statut != 'Attribué' %}
+        <form action="{{ url_for('upload_document') }}" method="post" enctype="multipart/form-data" class="mb-6 p-4 bg-white rounded-lg shadow-md">
+    <div class="flex flex-col sm:flex-row gap-4 items-end">
+        <div class="flex-1">
+            <label for="file" class="block text-sm font-medium text-gray-700 mb-2">Ajouter un fichier :</label>
+            <input type="file" name="file" required class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gradient-to-l file:from-[#333] file:to-[#fa0504] file:text-white hover:file:bg-gradient-to-br file:cursor-pointer border border-gray-300 rounded-lg p-2">
+        </div>
+        <button type="submit" class="text-white bg-gradient-to-l from-[#333] to-[#fa0504] hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-6 py-2.5 text-center whitespace-nowrap">Téléverser</button>
+    </div>
+</form>
+{% endif %}
     <div class="overflow-x-auto">
         <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
             <thead class="text-white bg-gradient-to-l from-[#333]  to-[#fa0504]">
@@ -26,39 +36,52 @@ Documents
                     <th class="py-3 px-6 text-left">Nom</th>
                     <th class="py-3 px-6 text-left">Modifié</th>
                     <th class="py-3 px-6 text-left">Taille (KB)</th>
+                    {% if session['user_type'] == 'user' and current_user.role == 'admin'  and appel_offre.statut != 'Attribué' %}
+                    <th class="py-3 px-6 text-center">Actions</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody id="documentsTable">
-                <tr class="hover:bg-gradient-to-l from-[#d9d9d9]  to-[#fecdcd]">
-                    <td class="py-3 px-6 text-center">
-                        <input type="checkbox" class="document-checkbox cursor-pointer" value="{{ url_for('static', filename='pdfs/RGAO v21.pdf') }}">
-                    </td>
-                    <td class="py-3 px-6">
-                        <a href="{{ url_for('static', filename='pdfs/RGAO v21.pdf') }}" download>RGAO v21</a>
-                    </td>
-                    <td class="py-3 px-6">12/03/2025</td>
-                    <td class="py-3 px-6">568 KB</td>
-                </tr>
-                <tr class="hover:bg-gradient-to-l from-[#d9d9d9]  to-[#fecdcd]">
-                    <td class="py-3 px-6 text-center">
-                        <input type="checkbox" class="document-checkbox cursor-pointer" value="{{ url_for('static', filename='pdfs/SPMSE TANGER.pdf') }}">
-                    </td>
-                    <td class="py-3 px-6">
-                        <a href="{{ url_for('static', filename='pdfs/SPMSE TANGER.pdf') }}" download>SPMSE TANGER</a>
-                    </td>
-                    <td class="py-3 px-6">12/03/2025</td>
-                    <td class="py-3 px-6">1270 KB</td>
-                </tr>
-                <tr class="hover:bg-gradient-to-l from-[#d9d9d9]  to-[#fecdcd]">
-                    <td class="py-3 px-6 text-center">
-                        <input type="checkbox" class="document-checkbox cursor-pointer" value="{{ url_for('static', filename='pdfs/SPMSE TETOUAN.pdf') }}">
-                    </td>
-                    <td class="py-3 px-6">
-                        <a href="{{ url_for('static', filename='pdfs/SPMSE TETOUAN.pdf') }}" download>SPMSE TETOUAN</a>
-                    </td>
-                    <td class="py-3 px-6">12/03/2025</td>
-                    <td class="py-3 px-6">423 KB</td>
-                </tr>
+                {% for doc in files %}
+<tr class="hover:bg-gradient-to-l from-[#d9d9d9]  to-[#fecdcd]">
+    <td class="py-3 px-6 text-center">
+        <input type="checkbox" class="document-checkbox cursor-pointer" value="{{ url_for('static', filename='uploads/upload_documents/' + doc.name) }}">
+    </td>
+    <td class="py-3 px-6">
+        <a href="{{ url_for('static', filename='uploads/upload_documents/' + doc.name) }}" download>{{ doc.name }}</a>
+    </td>
+    <td class="py-3 px-6">{{ doc.modified }}</td>
+    <td class="py-3 px-6">{{ doc.size }} KB</td>
+    {% if session['user_type'] == 'user' and current_user.role == 'admin'  and appel_offre.statut != 'Attribué' %}
+    <td class="py-3 px-6 text-center">
+        <div class="flex justify-center items-center gap-2">
+            <form action="{{ url_for('delete_document', filename=doc.name) }}" method="post" style="display:inline;">
+                <button type="submit" class="text-red-500 hover:underline p-1"><svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g id="SVGRepo_iconCarrier">
+                                    <path d="M3 6.4C3 5.9 3.4 5.5 3.8 5.5H6.4C6.96 5.49 7.43 5.11 7.61 4.54L7.76 4.05C7.83 3.81 7.89 3.6 7.97 3.42C8.31 2.68 8.94 2.16 9.66 2.03C9.84 2 10.04 2 10.26 2H13.74C13.96 2 14.16 2 14.34 2.03C15.06 2.16 15.69 2.68 16.03 3.42C16.11 3.6 16.17 3.81 16.24 4.05L16.36 4.44C16.38 4.51 16.38 4.53 16.39 4.54C16.57 5.11 17.13 5.49 17.66 5.5H20.2C20.65 5.5 21 5.9 21 6.4C21 6.9 20.65 7.3 20.2 7.3H3.8C3.35 7.3 3 6.9 3 6.4Z" fill="#E63946"></path>
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M9.42 11.5C9.84 11.44 10.21 11.75 10.25 12.19L10.75 17.45C10.79 17.89 10.49 18.27 10.07 18.32C9.66 18.36 9.29 18.04 9.25 17.61L8.75 12.35C8.71 11.91 9.01 11.52 9.42 11.5Z" fill="#333"></path>
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M14.57 11.5C14.99 11.52 15.29 11.91 15.25 12.35L14.75 17.61C14.71 18.04 14.34 18.36 13.92 18.32C13.51 18.27 13.21 17.89 13.25 17.45L13.75 12.19C13.79 11.75 14.16 11.44 14.57 11.5Z" fill="#333"></path>
+                                    <path opacity="0.7" d="M11.6 22H12.4C15.19 22 16.58 22 17.48 21.11C18.39 20.23 18.48 18.78 18.67 15.87L18.93 11.68C19.03 10.1 19.08 9.32 18.63 8.82C18.18 8.32 17.41 8.32 15.88 8.32H8.12C6.59 8.32 5.82 8.32 5.37 8.82C4.92 9.32 4.97 10.1 5.07 11.68L5.33 15.87C5.52 18.78 5.61 20.23 6.52 21.11C7.42 22 8.81 22 11.6 22Z" fill="#E63946"></path>
+                                </g>
+                            </svg></button>
+            </form>
+            <div class="flex flex-col sm:flex-row items-center gap-1">
+                <form action="{{ url_for('rename_document', filename=doc.name) }}" method="post" class="flex items-center gap-1">
+                    <input type="text" name="new_name" placeholder="Nouveau nom" required class="border border-gray-300 px-2 py-1 text-xs rounded-md w-24 focus:ring-2 focus:ring-red-300 focus:border-transparent">
+                    <button type="submit" class="text-blue-500 hover:underline p-1"><svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <g id="SVGRepo_iconCarrier">
+                                            <path opacity="1" d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z" fill="#DA0000"></path> 
+                                            <path d="M9 12.5L11.5 15L15.5 9.5" stroke="#d9d9d9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </g>
+                                    </svg></button>
+                </form>
+            </div>
+        </div>
+    </td>
+    {% endif %}
+</tr>
+{% endfor %}
+
                 <tr>
                     <td class="py-3 px-6 text-center">
                         <center>
